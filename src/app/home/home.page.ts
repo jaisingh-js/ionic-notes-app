@@ -14,28 +14,13 @@ export class HomePage {
   constructor(private notesService: NotesService, private navController: NavController) { }
   
   ngOnInit() {
-    this.load();
+    this.notes = this.notesService.notes;
+    this.notesService.getNotes().subscribe(notes => this.notes = notes);
   }
 
-  async load() {
-    await this.notesService.load().then(
-      (success) => {
-        this.notesService.loadNotes().then(
-          (data) => {
-            this.notes = this.notesService.getNotes();
-          });
-      }
-    );
-    
-  }
 
   createNote() {
     this.navController.navigateForward('notes/new');
   }
-
-  // refreshList() {
-  //   this.notes = this.notesService.getNotes();
-  //   console.log(this.notes);
-  // }
 
 }

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
+import { Subject } from 'rxjs';
 import { INote } from '../interfaces/inote';
 
 @Injectable({
@@ -8,72 +10,71 @@ import { INote } from '../interfaces/inote';
 export class NotesService {
   dataStorage: Storage | null = null;
   notes: INote[] = [];
+  loaded: boolean = false;
   key: string = 'notes';
+  notesListener = new Subject<INote[]>();
 
-
-  constructor(private storage: Storage) { }
-
-  async load() {
-    this.dataStorage = await this.storage.create();
+  constructor(private storage: Storage, private toastController: ToastController) { 
+    this.loadNotes();
   }
+
+  async init() {
+    // If using, define drivers here: await this.storage.defineDriver(/*...*/);
+     this.dataStorage = await this.storage.create();
+  }
+
 
   async loadNotes() {
-    await this.getKeyValue(this.key) ?.then(
-      (notes) => {
-        if (notes) {
-          this.notes = notes;
-        }
-      }
-    ).catch((err) => console.log(err))
+    if (!this.dataStorage) { 
+      await this.init();
+    }
+    this.notes = await this.dataStorage?.get(this.key);
+    this.notesListener.next(this.notes);
   }
 
-  getKeyValue(key: string) {
-    return this.dataStorage?.get(key);
+  async getKeyValue(key: string) {
+    return await this.dataStorage?.get(key);
   }
 
-  setKeyValue(key: string, value: any) {
-    return this.dataStorage?.set(key, value);
+  async setKeyValue(key: string, value: any) {
+    return await this.dataStorage?.set(key, value);
   }
 
-  getNote(id: number) {
-    return this.notes[id];
+  getNote(index: number) {
+    return this.notes[index];
   }
 
   getNotes() {
-    return this.notes;
+    return this.notesListener.asObservable();
   }
 
   createNote(title: string, content: string) {
     const noteTitle = title;
     const noteContent = content;
-    const noteId = this.notes.length + 1;
     this.notes.push({
-      id: noteId,
       title: noteTitle,
       content: noteContent
     });
 
-    this.setKeyValue(this.key, this.notes)?.then(
-      (data) => {
-        console.log('data added to storage');
-        console.log(data);
-      }
-    );
+    this.setKeyValue(this.key, this.notes);
   }
 
-  saveNote(id: number, title: string, content: string) {
+  saveNote(index: number, title: string, content: string) {
     const noteTitle = title;
     const noteContent = content;
-    const noteId = id;
 
-    this.notes[id] = {
-      id: noteId,
+    this.notes[index] = {
       title: noteTitle,
       content: noteContent
     };
 
     this.setKeyValue(this.key, this.notes);
 
+  }
+
+  deleteNote(index: number) {
+    this.notes.splice(index, 1);
+    this.setKeyValue(this.key, this.notes);
   }
   
 }

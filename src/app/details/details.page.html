@@ -1,26 +1,48 @@
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar>
     <ion-back-button slot="start"></ion-back-button>
-    <ion-button (click)="addNote()" slot="end">Save</ion-button>
+    <ion-button
+      *ngIf="!newNote"
+      (click)="deleteNote()"
+      slot="end"
+      color="danger"
+      ><ion-icon name="trash-outline"></ion-icon
+    ></ion-button>
+
+    <ion-button
+      *ngIf="!newNote"
+      class="ion-margin"
+      slot="end"
+      (click)="onEdit()"
+      ><ion-icon name="create-outline"></ion-icon
+    ></ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-toolbar>
+    <ion-title>Title </ion-title>
+  </ion-toolbar>
+
   <ion-item>
-    <ion-title>{{ newNote ? "Create Note" : "Note"}}</ion-title>
+    <ion-input
+      [readonly]="!edit"
+      [(ngModel)]="title"
+      placeholder="Enter Title"
+    ></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label>Title: </ion-label>
-    <ion-input [(ngModel)]="title" placeholder="Enter Title"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label>Content: </ion-label>
     <ion-textarea
+      [readonly]="!edit"
+      placeholder="Write something here."
       [(ngModel)]="content"
+      rows="30"
       [autoGrow]="true"
-      rows="10"
     ></ion-textarea>
   </ion-item>
 </ion-content>
+
+<ion-footer>
+  <ion-button expand="full" (click)="addNote()">Save</ion-button>
+</ion-footer>

@@ -1,1 +1,11 @@
+<ion-item-sliding>
+  <ion-item shape="round" (click)="openNote()">
+    <ion-label>{{ note?.title }}</ion-label>
+  </ion-item>
 
+  <ion-item-options (ionSwipe)="sliderDragged()">
+    <ion-item-option expandable="true" color="danger"
+      ><ion-icon name="trash-outline"></ion-icon
+    ></ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

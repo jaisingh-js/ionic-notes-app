@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵisDefaultChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { INote } from '../interfaces/inote';
 import { NotesService } from '../services/notes.service';
 
@@ -12,23 +12,21 @@ import { NotesService } from '../services/notes.service';
 export class DetailsPage implements OnInit {
   id: string | null = null;
   newNote: boolean = false;
-  note: INote = {
-    title: '',
-    content: ''
-  };
   title: string = '';
   content: string = '';
+  edit: boolean = false;
 
-  constructor(private navController: NavController, private route: ActivatedRoute, private notesService: NotesService, private alertController: AlertController) { }
+  constructor(private navController: NavController, private route: ActivatedRoute, private notesService: NotesService, private alertController: AlertController, private toastController: ToastController) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id === "new") {
       this.newNote = true;
+      this.edit = true;
     }
 
     if (!this.newNote) {
-      console.log("note fetched");
+      
       const note = this.notesService.getNote(Number(this.id));
       this.title = note.title;
       this.content = note.content;
@@ -38,9 +36,6 @@ export class DetailsPage implements OnInit {
     // console.log(this.newNote);
   }
 
-  goToHome() {
-    this.navController.navigateBack('');
-  }
 
   async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
@@ -50,6 +45,16 @@ export class DetailsPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async showToast() {
+    const toast = await this.toastController.create({
+      message: 'Note Saved',
+      duration: 1500,
+      position: "bottom"
+    });
+
+    await toast.present();
   }
 
 
@@ -62,12 +67,25 @@ export class DetailsPage implements OnInit {
     else {
       if (this.newNote) {
         this.notesService.createNote(this.title, this.content);
+        this.showToast();
       } else {
         this.notesService.saveNote(Number(this.id), this.title, this.content);
+        this.showToast();
       }
 
       this.navController.navigateBack('');
     }
+  }
+
+  onEdit() {
+    if (!this.edit) {
+      this.edit = true;
+    }
+  }
+
+  deleteNote() {
+    this.notesService.deleteNote(Number(this.id));
+    this.navController.navigateBack('');
   }
   
 
