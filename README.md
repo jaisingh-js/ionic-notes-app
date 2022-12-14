@@ -1,4 +1,4 @@
-#Ionic Notes App
+# Ionic Notes App
 
 This is a notes application built with Ionic App Framework.
 
