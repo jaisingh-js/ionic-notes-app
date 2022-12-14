@@ -28,7 +28,10 @@ export class NotesService {
     if (!this.dataStorage) { 
       await this.init();
     }
-    this.notes = await this.dataStorage?.get(this.key);
+    const notes = await this.dataStorage?.get(this.key);
+    if (notes) {
+      this.notes = notes;
+    }
     this.notesListener.next(this.notes);
   }
 
