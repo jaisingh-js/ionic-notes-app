@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NotesService } from '../services/notes.service';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,10 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  constructor(private notesService: NotesService) { }
+  
+  ngOnInit() {
+    this.notesService.load();
+  }
 
 }
