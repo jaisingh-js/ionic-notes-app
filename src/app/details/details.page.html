@@ -1,9 +1,26 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Details</ion-title>
+  <ion-toolbar color="dark">
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-button (click)="addNote()" slot="end">Save</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-item>
+    <ion-title>{{ newNote ? "Create Note" : "Note"}}</ion-title>
+  </ion-item>
 
+  <ion-item>
+    <ion-label>Title: </ion-label>
+    <ion-input [(ngModel)]="title" placeholder="Enter Title"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Content: </ion-label>
+    <ion-textarea
+      [(ngModel)]="content"
+      [autoGrow]="true"
+      rows="10"
+    ></ion-textarea>
+  </ion-item>
 </ion-content>
