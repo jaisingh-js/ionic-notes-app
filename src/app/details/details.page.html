@@ -20,6 +20,13 @@
 </ion-header>
 
 <ion-content>
+  <div class="center">
+    <ion-select (ionChange)="selectValueChanged($event)" [value]="selectValue">
+      <ion-select-option *ngFor="let category of categories" [value]="category"
+        >{{category}}</ion-select-option
+      >
+    </ion-select>
+  </div>
   <ion-toolbar>
     <ion-title>Title </ion-title>
   </ion-toolbar>

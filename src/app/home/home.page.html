@@ -5,15 +5,38 @@
 </ion-header>
 
 <ion-content>
-  <!-- <ion-text *ngIf="notes.length === 0">No notes! Create a Note.</ion-text> -->
+  <div class="center">
+    <ion-select (ionChange)="selectValueChanged($event)" [value]="selectValue">
+      <ion-select-option *ngFor="let category of categories" [value]="category"
+        >{{category}}</ion-select-option
+      >
+    </ion-select>
+  </div>
 
-  <ion-list>
-    <app-note-item
-      *ngFor="let note of notes; let i=index;"
-      [note]="note"
-      [index]="i"
-    ></app-note-item>
-  </ion-list>
+  <div *ngIf="notes.length > 0">
+    <!-- <ion-text *ngIf="notes.length === 0">No notes! Create a Note.</ion-text> -->
+
+    <ion-list>
+      <app-note-item
+        *ngFor="let note of notes; let i=index;"
+        [note]="note"
+        [index]="i"
+      ></app-note-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="selectValue === 'All' && notes.length < 1" class="center">
+    <ion-text class="ion-padding"
+      >No notes found. click the button in bottom to add a note.</ion-text
+    >
+  </div>
+
+  <div *ngIf="selectValue !== 'All' && notes.length < 1" class="center">
+    <ion-text class="ion-padding"
+      >No notes in this category. click the button in bottom to add a
+      note.</ion-text
+    >
+  </div>
 </ion-content>
 
 <ion-footer>

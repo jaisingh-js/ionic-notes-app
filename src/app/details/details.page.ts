@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { INote } from '../interfaces/inote';
 import { NotesService } from '../services/notes.service';
+import { categories } from '../shared/categories';
 
 @Component({
   selector: 'app-details',
@@ -15,6 +16,9 @@ export class DetailsPage implements OnInit {
   title: string = '';
   content: string = '';
   edit: boolean = false;
+  categories = categories;
+  selectValue: string = "All";
+
 
   constructor(private navController: NavController, private route: ActivatedRoute, private notesService: NotesService, private alertController: AlertController, private toastController: ToastController) { }
 
@@ -66,10 +70,10 @@ export class DetailsPage implements OnInit {
     }
     else {
       if (this.newNote) {
-        this.notesService.createNote(this.title, this.content);
+        this.notesService.createNote(this.title, this.content, this.selectValue);
         this.showToast();
       } else {
-        this.notesService.saveNote(Number(this.id), this.title, this.content);
+        this.notesService.saveNote(Number(this.id), this.title, this.content, this.selectValue);
         this.showToast();
       }
 
@@ -86,6 +90,10 @@ export class DetailsPage implements OnInit {
   deleteNote() {
     this.notesService.deleteNote(Number(this.id));
     this.navController.navigateBack('');
+  }
+
+  selectValueChanged(ev: any) {
+    this.selectValue = ev.detail.value;
   }
   
 

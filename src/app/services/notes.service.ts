@@ -3,6 +3,7 @@ import { ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { Subject } from 'rxjs';
 import { INote } from '../interfaces/inote';
+import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class NotesService {
 
   async init() {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
-     this.dataStorage = await this.storage.create();
+    this.dataStorage = await this.storage.create();
+    await this.dataStorage.defineDriver(CordovaSQLiteDriver);
   }
 
 
@@ -51,24 +53,28 @@ export class NotesService {
     return this.notesListener.asObservable();
   }
 
-  createNote(title: string, content: string) {
+  createNote(title: string, content: string, category: string) {
     const noteTitle = title;
     const noteContent = content;
+    const noteCategory = category;
     this.notes.push({
       title: noteTitle,
-      content: noteContent
+      content: noteContent,
+      category: noteCategory
     });
 
     this.setKeyValue(this.key, this.notes);
   }
 
-  saveNote(index: number, title: string, content: string) {
+  saveNote(index: number, title: string, content: string, category: string) {
     const noteTitle = title;
     const noteContent = content;
+    const noteCategory = category;
 
     this.notes[index] = {
       title: noteTitle,
-      content: noteContent
+      content: noteContent,
+      category: noteCategory
     };
 
     this.setKeyValue(this.key, this.notes);
