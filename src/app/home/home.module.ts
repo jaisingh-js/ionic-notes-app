@@ -6,6 +6,7 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { NoteItemComponent } from './note-item/note-item.component';
+import { NotesListComponent } from './notes-list/notes-list.component';
 
 
 @NgModule({
@@ -15,6 +16,6 @@ import { NoteItemComponent } from './note-item/note-item.component';
     IonicModule,
     HomePageRoutingModule
   ],
-  declarations: [HomePage, NoteItemComponent]
+  declarations: [HomePage, NoteItemComponent, NotesListComponent]
 })
 export class HomePageModule {}

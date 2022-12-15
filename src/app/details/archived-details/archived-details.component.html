@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button slot="start"></ion-back-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-toolbar>
+    <ion-title>Title </ion-title>
+  </ion-toolbar>
+
+  <ion-item>
+    <ion-input
+      readonly="true"
+      [value]="note?.title"
+      placeholder="Enter Title"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-textarea
+      readonly="true"
+      placeholder="Write something here."
+      [value]="note?.content"
+      rows="30"
+      [autoGrow]="true"
+    ></ion-textarea>
+  </ion-item>
+</ion-content>

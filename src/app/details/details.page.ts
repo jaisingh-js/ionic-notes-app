@@ -18,6 +18,7 @@ export class DetailsPage implements OnInit {
   edit: boolean = false;
   categories = categories;
   selectValue: string = "All";
+  archived?: boolean;
 
 
   constructor(private navController: NavController, private route: ActivatedRoute, private notesService: NotesService, private alertController: AlertController, private toastController: ToastController) { }
@@ -34,10 +35,7 @@ export class DetailsPage implements OnInit {
       const note = this.notesService.getNote(Number(this.id));
       this.title = note.title;
       this.content = note.content;
-      // console.log(this.note);
     }
-
-    // console.log(this.newNote);
   }
 
 
@@ -70,10 +68,10 @@ export class DetailsPage implements OnInit {
     }
     else {
       if (this.newNote) {
-        this.notesService.createNote(this.title, this.content, this.selectValue);
+        this.notesService.createNote(this.title, this.content);
         this.showToast();
       } else {
-        this.notesService.saveNote(Number(this.id), this.title, this.content, this.selectValue);
+        this.notesService.saveNote(Number(this.id), this.title, this.content);
         this.showToast();
       }
 

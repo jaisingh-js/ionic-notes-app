@@ -11,19 +11,27 @@ import { categories } from '../shared/categories';
 })
 export class HomePage {
   notes: INote[] = [];
-  allNotes: INote[] = [];
+  // allNotes: INote[] = [];
+  archivedNotes: INote[] = [];
+  // allArchivedNotes: INote[] = [];
   categories = categories;
   selectValue: string = "All";
+  segmentValue: string = "unarchived";
+  archived: boolean = false;
 
 
   constructor(private notesService: NotesService, private navController: NavController) { }
   
   ngOnInit() {
-    // this.notes = this.notesService.notes;
     this.notesService.getNotes().subscribe(notes => {
       this.notes = notes;
-      this.allNotes = notes;
+      // this.allNotes = notes;
     });
+
+    this.notesService.getArchivedNotes().subscribe(notes => {
+      this.archivedNotes = notes;
+      // this.allArchivedNotes = notes;   
+    })
   }
 
 
@@ -31,10 +39,14 @@ export class HomePage {
     this.navController.navigateForward('notes/new');
   }
 
-  selectValueChanged(ev: any) {
-    this.selectValue = ev.detail.value;
-    const filteredNotes = this.allNotes.filter((note) => note.category === ev.detail.value);
-    this.notes = filteredNotes;
+  segmentValueChanged(ev: any) {
+    this.segmentValue = ev.detail.value;
+    if (ev.detail.value === 'archived') {
+      this.archived = true;
+    }
+    else {
+      this.archived = false;
+    }
   }
 
 }

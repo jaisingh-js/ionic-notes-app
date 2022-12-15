@@ -12,15 +12,35 @@ export class NoteItemComponent implements OnInit {
 
   @Input() note?: INote;
   @Input() index?: number;
+  @Input() archived: boolean = false;
 
   constructor(private navController: NavController, private notesSevice: NotesService) { }
 
   ngOnInit() {
-    // console.log(this.note);
   }
 
   openNote() {
-    this.navController.navigateForward('notes/' + this.index);
+    if (!this.archived) {
+      this.navController.navigateForward('notes/' + this.index);
+    } else {
+      this.navController.navigateForward('notes/archived/' + this.index);
+
+    }
+       
+  }
+
+  archiveSlider() {
+    if (!this.archived) {
+      if (this.index !== undefined) {
+        this.notesSevice.archiveNote(this.index);
+      }
+    }
+    else {
+      if (this.index !== undefined) {
+        this.notesSevice.unarchiveNote(this.index);
+      }
+    }
+    
     
   }
 
@@ -28,7 +48,6 @@ export class NoteItemComponent implements OnInit {
     if (this.index !== undefined) {
       this.notesSevice.deleteNote(this.index);
     }
-    
   }
 
 }

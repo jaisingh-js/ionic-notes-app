@@ -11,16 +11,19 @@ import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 export class NotesService {
   dataStorage: Storage | null = null;
   notes: INote[] = [];
+  archivedNotes: INote[] = [];
   loaded: boolean = false;
   key: string = 'notes';
+  archivedKey: string = 'archived';
   notesListener = new Subject<INote[]>();
+  aNotesListener = new Subject<INote[]>();
 
   constructor(private storage: Storage, private toastController: ToastController) { 
     this.loadNotes();
+    this.loadArchivedNotes();
   }
 
   async init() {
-    // If using, define drivers here: await this.storage.defineDriver(/*...*/);
     this.dataStorage = await this.storage.create();
     await this.dataStorage.defineDriver(CordovaSQLiteDriver);
   }
@@ -35,6 +38,17 @@ export class NotesService {
       this.notes = notes;
     }
     this.notesListener.next(this.notes);
+  }
+
+  async loadArchivedNotes() {
+    if (!this.dataStorage) { 
+      await this.init();
+    }
+    const anotes = await this.dataStorage?.get(this.archivedKey);
+    if (anotes) {
+      this.archivedNotes = anotes;
+    }
+    this.aNotesListener.next(this.archivedNotes);
   }
 
   async getKeyValue(key: string) {
@@ -53,7 +67,7 @@ export class NotesService {
     return this.notesListener.asObservable();
   }
 
-  createNote(title: string, content: string, category: string) {
+  createNote(title: string, content: string, category: string = 'all') {
     const noteTitle = title;
     const noteContent = content;
     const noteCategory = category;
@@ -66,7 +80,7 @@ export class NotesService {
     this.setKeyValue(this.key, this.notes);
   }
 
-  saveNote(index: number, title: string, content: string, category: string) {
+  saveNote(index: number, title: string, content: string, category: string = 'all') {
     const noteTitle = title;
     const noteContent = content;
     const noteCategory = category;
@@ -84,6 +98,34 @@ export class NotesService {
   deleteNote(index: number) {
     this.notes.splice(index, 1);
     this.setKeyValue(this.key, this.notes);
+  }
+
+  archiveNote(index: number) {
+    const note = this.notes.splice(index, 1);
+    this.setKeyValue(this.key, this.notes);
+    for (let n of note) {
+      this.archivedNotes.push(n);
+      
+    }
+    this.setKeyValue(this.archivedKey, this.archivedNotes);
+    // console.log(this.archivedNotes);
+  }
+
+  unarchiveNote(index: number) {
+    const note = this.archivedNotes.splice(index, 1);
+    this.setKeyValue(this.archivedKey, this.archivedNotes);
+    for (let n of note) {
+      this.notes.push(n);     
+    }
+    this.setKeyValue(this.key, this.notes);
+  }
+
+  getArchivedNotes() {
+    return this.aNotesListener.asObservable();
+  }
+
+  getArchivedNote(index: number) {
+    return this.archivedNotes[index];
   }
   
 }

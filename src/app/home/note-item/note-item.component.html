@@ -1,9 +1,15 @@
 <ion-item-sliding>
+  <ion-item-options side="start" (ionSwipe)="archiveSlider()">
+    <ion-item-option expandable="true" color="success">{{
+      archived ? "unarchive" : "archive"
+    }}</ion-item-option>
+  </ion-item-options>
+
   <ion-item shape="round" (click)="openNote()">
     <ion-label>{{ note?.title }}</ion-label>
   </ion-item>
 
-  <ion-item-options (ionSwipe)="sliderDragged()">
+  <ion-item-options *ngIf="!archived" side="end" (ionSwipe)="sliderDragged()">
     <ion-item-option expandable="true" color="danger"
       ><ion-icon name="trash-outline"></ion-icon
     ></ion-item-option>
