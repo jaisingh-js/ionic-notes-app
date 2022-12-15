@@ -11,9 +11,7 @@ import { categories } from '../shared/categories';
 })
 export class HomePage {
   notes: INote[] = [];
-  // allNotes: INote[] = [];
   archivedNotes: INote[] = [];
-  // allArchivedNotes: INote[] = [];
   categories = categories;
   selectValue: string = "All";
   segmentValue: string = "unarchived";

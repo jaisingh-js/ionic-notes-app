@@ -1,10 +1,10 @@
-<!-- <div class="center">
+<div class="center">
   <ion-select (ionChange)="selectValueChanged($event)" [value]="selectValue">
     <ion-select-option *ngFor="let category of categories" [value]="category">{{
       category
     }}</ion-select-option>
   </ion-select>
-</div> -->
+</div>
 
 <div *ngIf="notes.length > 0">
   <!-- <ion-text *ngIf="notes.length === 0">No notes! Create a Note.</ion-text> -->
@@ -13,7 +13,6 @@
     <app-note-item
       *ngFor="let note of notes; let i = index"
       [note]="note"
-      [index]="i"
       [archived]="archived"
     ></app-note-item>
   </ion-list>

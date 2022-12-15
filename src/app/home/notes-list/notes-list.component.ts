@@ -13,7 +13,7 @@ export class NotesListComponent implements OnInit {
   @Input() allNotes: INote[] = [];
   @Input() archived: boolean = false;
   categories = categories;
-  // selectValue: string = "All";
+  selectValue: string = "All";
 
   constructor(private notesService: NotesService) { }
 
@@ -40,10 +40,17 @@ export class NotesListComponent implements OnInit {
   }
 
 
-  // selectValueChanged(ev: any) {
-  //   this.selectValue = ev.detail.value;
-  //   const filteredNotes = this.allNotes.filter((note) => note.category === ev.detail.value);
-  //   this.notes = filteredNotes;
-  // }
+  selectValueChanged(ev: any) {
+    this.selectValue = ev.detail.value;
+    if (ev.detail.value !== 'All') {
+      const filteredNotes = this.allNotes.filter((note) => note.category === ev.detail.value);
+      this.notes = filteredNotes;
+    }
+    else {
+      this.notes = this.allNotes;
+    }
+
+    
+  }
 
 }

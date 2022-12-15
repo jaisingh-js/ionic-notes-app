@@ -59,73 +59,150 @@ export class NotesService {
     return await this.dataStorage?.set(key, value);
   }
 
-  getNote(index: number) {
-    return this.notes[index];
+  //working
+  getNote(id: string) {
+    for (let note of this.notes) {
+      if (note.id === id) {
+        return note;
+      }
+    }
+    return;
   }
 
+
+  //working
   getNotes() {
     return this.notesListener.asObservable();
   }
 
-  createNote(title: string, content: string, category: string = 'all') {
+
+  //working
+  createNote(title: string, content: string, category: string = 'All') {
     const noteTitle = title;
     const noteContent = content;
     const noteCategory = category;
+    const noteId = Date.now().toString();
     this.notes.push({
+      id: noteId,
       title: noteTitle,
       content: noteContent,
       category: noteCategory
     });
 
+    console.log(this.notes);
+
     this.setKeyValue(this.key, this.notes);
   }
 
-  saveNote(index: number, title: string, content: string, category: string = 'all') {
+
+  //working
+  saveNote(id: string, title: string, content: string, category: string = 'All') {
     const noteTitle = title;
     const noteContent = content;
     const noteCategory = category;
+    let index = 0;
 
-    this.notes[index] = {
-      title: noteTitle,
+    const newNote = {
+      id: id,
       content: noteContent,
-      category: noteCategory
-    };
-
-    this.setKeyValue(this.key, this.notes);
-
-  }
-
-  deleteNote(index: number) {
-    this.notes.splice(index, 1);
-    this.setKeyValue(this.key, this.notes);
-  }
-
-  archiveNote(index: number) {
-    const note = this.notes.splice(index, 1);
-    this.setKeyValue(this.key, this.notes);
-    for (let n of note) {
-      this.archivedNotes.push(n);
-      
+      category: noteCategory,
+      title: noteTitle
     }
-    this.setKeyValue(this.archivedKey, this.archivedNotes);
-    // console.log(this.archivedNotes);
-  }
 
-  unarchiveNote(index: number) {
-    const note = this.archivedNotes.splice(index, 1);
-    this.setKeyValue(this.archivedKey, this.archivedNotes);
-    for (let n of note) {
-      this.notes.push(n);     
+    for (let note of this.notes) {
+      if (note.id === id) {
+        index = this.notes.indexOf(note);
+      }
     }
+
+    this.notes[index] = newNote;
+
+    console.log(this.notes);
     this.setKeyValue(this.key, this.notes);
+
   }
 
+
+  //working
+  deleteNote(id: string) {
+    let index = this.getNotesIndex(id);
+
+    if (index !== null) {
+      this.notes.splice(index, 1);
+    this.setKeyValue(this.key, this.notes);
+    }  
+  }
+
+
+  //working
+  archiveNote(id: string) {
+    console.log('this function called');
+    const index = this.getNotesIndex(id);
+    if (index !== null) {
+      const note = this.notes.splice(index, 1);
+      this.setKeyValue(this.key, this.notes);
+
+      for (let n of note) {
+        this.archivedNotes.push(n);       
+      }
+
+      this.setKeyValue(this.archivedKey, this.archivedNotes);
+    }
+  }
+
+
+  //working
+  unarchiveNote(id: string) {
+    const index = this.getArchivedNotesIndex(id);
+    if (index !== null) {
+      const note = this.archivedNotes.splice(index, 1);
+      this.setKeyValue(this.archivedKey, this.archivedNotes);
+
+      for (let n of note) {
+        this.notes.push(n);       
+      }
+
+      this.setKeyValue(this.key, this.notes);
+    }
+
+  }
+
+
+  //working
   getArchivedNotes() {
     return this.aNotesListener.asObservable();
   }
 
-  getArchivedNote(index: number) {
-    return this.archivedNotes[index];
+
+  //todo
+  getArchivedNote(id: string) {
+    const index = this.getArchivedNotesIndex(id);
+    if (index !== null) {
+      return this.archivedNotes[index];
+    }
+
+    return;
+  }
+
+
+  getNotesIndex(id: string) {
+    for (let note of this.notes) {
+      if (note.id === id) {
+        return this.notes.indexOf(note);
+      }
+    }
+
+    return null;
+  }
+
+  getArchivedNotesIndex(id: string) {
+    for (let note of this.archivedNotes) {
+      if (note.id === id) {
+        return this.archivedNotes.indexOf(note);
+      }
+    }
+
+    return null;
   }
   
 }

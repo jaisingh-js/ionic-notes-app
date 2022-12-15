@@ -9,14 +9,15 @@ import { NotesService } from 'src/app/services/notes.service';
   styleUrls: ['./archived-details.component.scss'],
 })
 export class ArchivedDetailsComponent implements OnInit {
-  private index: string | null = null;
   note?: INote;
 
   constructor(private route: ActivatedRoute, private notesService: NotesService) { }
 
   ngOnInit() {
-    this.index = this.route.snapshot.paramMap.get('id');
-    this.note = this.notesService.getArchivedNote(Number(this.index));
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id !== null) {
+      this.note = this.notesService.getArchivedNote(id);
+    }
   }
 
 }

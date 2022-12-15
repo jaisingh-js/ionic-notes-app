@@ -11,7 +11,6 @@ import { NotesService } from 'src/app/services/notes.service';
 export class NoteItemComponent implements OnInit {
 
   @Input() note?: INote;
-  @Input() index?: number;
   @Input() archived: boolean = false;
 
   constructor(private navController: NavController, private notesSevice: NotesService) { }
@@ -21,32 +20,28 @@ export class NoteItemComponent implements OnInit {
 
   openNote() {
     if (!this.archived) {
-      this.navController.navigateForward('notes/' + this.index);
+      this.navController.navigateForward('notes/' + this.note?.id);
     } else {
-      this.navController.navigateForward('notes/archived/' + this.index);
+      this.navController.navigateForward('notes/archived/' + this.note?.id);
 
     }
        
   }
 
   archiveSlider() {
-    if (!this.archived) {
-      if (this.index !== undefined) {
-        this.notesSevice.archiveNote(this.index);
-      }
+    if (!this.archived && this.note) { 
+      this.notesSevice.archiveNote(this.note?.id); 
     }
-    else {
-      if (this.index !== undefined) {
-        this.notesSevice.unarchiveNote(this.index);
-      }
+    else if(this.note) {
+        this.notesSevice.unarchiveNote(this.note?.id);
     }
     
     
   }
 
   sliderDragged() {
-    if (this.index !== undefined) {
-      this.notesSevice.deleteNote(this.index);
+    if (this.note) {
+      this.notesSevice.deleteNote(this.note?.id);    
     }
   }
 

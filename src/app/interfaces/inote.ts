@@ -1,6 +1,6 @@
 export interface INote {
-    id?: number;
-    category?: string;
+    id: string;
+    category: string;
     title: string;
     content: string;
 }

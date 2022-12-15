@@ -11,7 +11,7 @@ import { categories } from '../shared/categories';
   styleUrls: ['./details.page.scss'],
 })
 export class DetailsPage implements OnInit {
-  id: string | null = null;
+  id: string = '';
   newNote: boolean = false;
   title: string = '';
   content: string = '';
@@ -24,17 +24,23 @@ export class DetailsPage implements OnInit {
   constructor(private navController: NavController, private route: ActivatedRoute, private notesService: NotesService, private alertController: AlertController, private toastController: ToastController) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.id = id;
+    }
     if (this.id === "new") {
       this.newNote = true;
       this.edit = true;
     }
 
-    if (!this.newNote) {
+    if (!this.newNote && this.id !== '') {
       
-      const note = this.notesService.getNote(Number(this.id));
-      this.title = note.title;
-      this.content = note.content;
+      const note = this.notesService.getNote(this.id);
+      if (note) {
+        this.title = note.title;
+        this.content = note.content;
+      }
+      
     }
   }
 
@@ -68,12 +74,14 @@ export class DetailsPage implements OnInit {
     }
     else {
       if (this.newNote) {
-        this.notesService.createNote(this.title, this.content);
-        this.showToast();
-      } else {
-        this.notesService.saveNote(Number(this.id), this.title, this.content);
+        this.notesService.createNote(this.title, this.content, this.selectValue);
         this.showToast();
       }
+      else if (this.id !== null) {
+          this.notesService.saveNote(this.id, this.title, this.content, this.selectValue);
+        this.showToast();
+      }
+        
 
       this.navController.navigateBack('');
     }
@@ -86,7 +94,7 @@ export class DetailsPage implements OnInit {
   }
 
   deleteNote() {
-    this.notesService.deleteNote(Number(this.id));
+    this.notesService.deleteNote(this.id);
     this.navController.navigateBack('');
   }
 
