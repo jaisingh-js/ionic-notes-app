@@ -6,7 +6,14 @@
   </ion-item-options>
 
   <ion-item shape="round" (click)="openNote()">
-    <ion-label>{{ note?.title }}</ion-label>
+    <ion-label
+      ><div [appCrossText]="archived">
+        {{ note?.title }}
+      </div></ion-label
+    >
+    <ion-text *ngIf="!archived"
+      >expiring in {{ note?.expire | daysofdate }} days</ion-text
+    >
   </ion-item>
 
   <ion-item-options *ngIf="!archived" side="end" (ionSwipe)="sliderDragged()">

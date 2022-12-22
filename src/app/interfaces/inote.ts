@@ -3,4 +3,5 @@ export interface INote {
     category: string;
     title: string;
     content: string;
+    expire: Date;
 }

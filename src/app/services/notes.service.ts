@@ -77,16 +77,19 @@ export class NotesService {
 
 
   //working
-  createNote(title: string, content: string, category: string = 'All') {
+  //modified to work with date
+  createNote(title: string, content: string, category: string = 'All', date: Date) {
     const noteTitle = title;
     const noteContent = content;
     const noteCategory = category;
+    const notExpire = date;
     const noteId = Date.now().toString();
     this.notes.push({
       id: noteId,
       title: noteTitle,
       content: noteContent,
-      category: noteCategory
+      category: noteCategory,
+      expire: notExpire
     });
 
     console.log(this.notes);
@@ -96,17 +99,20 @@ export class NotesService {
 
 
   //working
-  saveNote(id: string, title: string, content: string, category: string = 'All') {
+  //modifed to add date
+  saveNote(id: string, title: string, content: string, category: string = 'All', date: Date) {
     const noteTitle = title;
     const noteContent = content;
     const noteCategory = category;
+    const notExpire = date;
     let index = 0;
 
-    const newNote = {
+    const newNote: INote = {
       id: id,
       content: noteContent,
       category: noteCategory,
-      title: noteTitle
+      title: noteTitle,
+      expire: notExpire
     }
 
     for (let note of this.notes) {

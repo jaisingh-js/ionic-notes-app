@@ -19,6 +19,9 @@ export class DetailsPage implements OnInit {
   categories = categories;
   selectValue: string = "All";
   archived?: boolean;
+  // date: Date = new Date();
+  date = new Date(this.getLocalISODate(new Date()).getTime() + 30*24*60*60*1000).toISOString();
+  minDate = new Date(Date.now() - new Date().getTimezoneOffset() * 60000 + 24*60*60*1000).toISOString();
 
 
   constructor(private navController: NavController, private route: ActivatedRoute, private notesService: NotesService, private alertController: AlertController, private toastController: ToastController) { }
@@ -39,9 +42,14 @@ export class DetailsPage implements OnInit {
       if (note) {
         this.title = note.title;
         this.content = note.content;
+        this.date = this.getLocalISODate(note.expire).toISOString();
       }
       
     }
+  }
+
+  getLocalISODate(date: Date) {
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
   }
 
 
@@ -74,11 +82,11 @@ export class DetailsPage implements OnInit {
     }
     else {
       if (this.newNote) {
-        this.notesService.createNote(this.title, this.content, this.selectValue);
+        this.notesService.createNote(this.title, this.content, this.selectValue, new Date(this.date));
         this.showToast();
       }
       else if (this.id !== null) {
-          this.notesService.saveNote(this.id, this.title, this.content, this.selectValue);
+          this.notesService.saveNote(this.id, this.title, this.content, this.selectValue, new Date(this.date));
         this.showToast();
       }
         
@@ -100,6 +108,10 @@ export class DetailsPage implements OnInit {
 
   selectValueChanged(ev: any) {
     this.selectValue = ev.detail.value;
+  }
+
+  dateChanged(ev: any) {
+    console.log(new Date(this.date));
   }
   
 

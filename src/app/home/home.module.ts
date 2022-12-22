@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { NoteItemComponent } from './note-item/note-item.component';
 import { NotesListComponent } from './notes-list/notes-list.component';
+import { SharedmoduleModule } from '../sharedmodule/sharedmodule.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { NotesListComponent } from './notes-list/notes-list.component';
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    SharedmoduleModule
   ],
   declarations: [HomePage, NoteItemComponent, NotesListComponent]
 })

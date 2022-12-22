@@ -27,9 +27,25 @@
       >
     </ion-select>
   </div>
+
   <ion-toolbar>
-    <ion-title>Title </ion-title>
+    <ion-title>Expire on</ion-title>
   </ion-toolbar>
+  <ion-datetime-button datetime="datetime"></ion-datetime-button>
+  <ion-toolbar>
+    <ion-title>Title</ion-title>
+  </ion-toolbar>
+
+  <ion-modal [keepContentsMounted]="true"
+    ><ng-template>
+      <ion-datetime
+        id="datetime"
+        (ionChange)="dateChanged($event)"
+        [(ngModel)]="date"
+        [min]="minDate"
+        showDefaultButtons="true"
+      ></ion-datetime> </ng-template
+  ></ion-modal>
 
   <ion-item>
     <ion-input
