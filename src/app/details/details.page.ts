@@ -110,9 +110,4 @@ export class DetailsPage implements OnInit {
     this.selectValue = ev.detail.value;
   }
 
-  dateChanged(ev: any) {
-    // console.log(new Date(this.date));
-  }
-  
-
 }
