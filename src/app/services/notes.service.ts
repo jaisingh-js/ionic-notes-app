@@ -92,8 +92,6 @@ export class NotesService {
       expire: notExpire
     });
 
-    console.log(this.notes);
-
     this.setKeyValue(this.key, this.notes);
   }
 
@@ -122,8 +120,6 @@ export class NotesService {
     }
 
     this.notes[index] = newNote;
-
-    console.log(this.notes);
     this.setKeyValue(this.key, this.notes);
 
   }

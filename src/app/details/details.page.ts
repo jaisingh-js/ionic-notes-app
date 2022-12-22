@@ -111,7 +111,7 @@ export class DetailsPage implements OnInit {
   }
 
   dateChanged(ev: any) {
-    console.log(new Date(this.date));
+    // console.log(new Date(this.date));
   }
   
 
