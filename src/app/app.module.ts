@@ -14,9 +14,7 @@ import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    IonicModule.forRoot({
-      mode: 'ios',
-    }),
+    IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot({
       name: '__mydb',
