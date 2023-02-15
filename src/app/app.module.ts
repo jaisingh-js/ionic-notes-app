@@ -12,10 +12,17 @@ import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot({
-    name: '__mydb',
-    driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB]
-  })],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot({
+      mode: 'ios',
+    }),
+    AppRoutingModule,
+    IonicStorageModule.forRoot({
+      name: '__mydb',
+      driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB],
+    }),
+  ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
